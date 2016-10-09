@@ -47,6 +47,7 @@ function entityResolver (str, dictionary, errorHandler){
 		)
 		.join("\n");
 }
+exports.entityResolver = entityResolver;
 
 /**
  * Parse an XML string that contains no entity and returns a result object
