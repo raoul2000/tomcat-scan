@@ -1,0 +1,30 @@
+{
+  "name": "tomcat-scan",
+  "version": "0.0.1",
+  "description": "scan and extract tomcat configuration from a remote location using SSH",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raoul2000/tomcat-scan.git"
+  },
+  "keywords": [
+    "ssh",
+    "tomcat",
+    "configuration"
+  ],
+  "author": "raoul2000 <raoul.boulard@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raoul2000/tomcat-scan/issues"
+  },
+  "homepage": "https://github.com/raoul2000/tomcat-scan#readme",
+  "devDependencies": {
+    "chai": "^3.5.0"
+  },
+  "dependencies": {
+    "xmldom": "^0.1.22"
+  }
+}
