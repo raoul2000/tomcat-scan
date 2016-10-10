@@ -69,7 +69,7 @@ describe('XML Parser',function(done){
 		done();
 	});
 
-	it('returns error if the XML is not well former',function(done){
+	it('returns error if the XML is not well formed',function(done){
 
 		var result = xmlParser.parse(
 			"<doc>" +

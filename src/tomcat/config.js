@@ -14,11 +14,16 @@
  * @return {array}      list of contexts
  */
 function getAllContext(dom) {
-  return dom.getElementsByTagName("Context").map(function(aContext,idx){
-    return {
-      'path'   : aContext.getAttribute('path'),
-      'docBase': aContext.getAttribute('docBase')
-    };
-  });
+
+  var contexts = [];
+  var contextList = dom.getElementsByTagName("Context");
+  for(var i=0; i<contextList.length; i ++) {
+    contexts.push({
+      'path' : contextList[i].getAttribute('path'),
+      'docBase' : contextList[i].getAttribute('docBase')
+    });
+  }
+
+  return contexts;
 }
 exports.getAllContext = getAllContext;
