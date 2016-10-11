@@ -1,6 +1,7 @@
 "use strict";
 
 var tomcatProps = require('./tomcat/properties'),
+    xmlParser = require('../src/helper/xml-parser'),
     readFile = require("ssh-utils").readFile;
 
 function scanTomcat(conn, installDir, xmlEntities) {
@@ -14,7 +15,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
     return readFile.readFileContent(conn, installDir+'/conf/server.xml');
   })
   .then(function(configFileContent){
-    //
+    var configDOM =
   });
 }
 

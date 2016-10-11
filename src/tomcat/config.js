@@ -19,11 +19,10 @@ function getAllContext(dom) {
   var contextList = dom.getElementsByTagName("Context");
   for(var i=0; i<contextList.length; i ++) {
     contexts.push({
-      'path' : contextList[i].getAttribute('path'),
+      'path'    : contextList[i].getAttribute('path'),
       'docBase' : contextList[i].getAttribute('docBase')
     });
   }
-
   return contexts;
 }
 exports.getAllContext = getAllContext;
