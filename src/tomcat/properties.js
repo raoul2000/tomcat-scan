@@ -1,7 +1,7 @@
 "use strict";
 
-var Q       = require('q'),
-    sshExec = require("ssh-utils");
+var Q        = require('q'),
+    sshUtils = require("ssh-utils");
 
 /**
  *
@@ -27,7 +27,7 @@ function extractTomcatProperties(conn, tomcatinstallDir) {
 		"properties"  : null
 	};
 	// another option would be to invoke the script tomcatinstallDir/bin/version.sh
-	return sshExec.command(conn,"cd "+tomcatinstallDir+"; java -cp  lib/catalina.jar org.apache.catalina.util.ServerInfo")
+	return sshUtils.exec.command(conn,"cd "+tomcatinstallDir+"; java -cp  lib/catalina.jar org.apache.catalina.util.ServerInfo")
 	.then(function(result){
 		finalResult.properties = result;
 		finalResult.properties.value = finalResult.properties.value.split('\n').map(function(line){

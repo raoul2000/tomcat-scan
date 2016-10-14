@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+
+	<display-name>EidosMedia OutputManager Servlet</display-name>
+	<welcome-file-list>
+		<welcome-file>default.html</welcome-file>
+	</welcome-file-list>
+
+
+
+
+	<listener>
+		<listener-class>com.eidosmedia.template.TemplateInitializer</listener-class>
+	</listener>
+	<servlet>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>com.eidosmedia.rest.applications.TemplateApplication</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<url-pattern>/service/*</url-pattern>
+	</servlet-mapping>
+
+	<filter>
+		<filter-name>TemplateStatsFilter</filter-name>
+		<filter-class>com.eidosmedia.template.TemplateStatsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>TemplateStatsFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+	<!-- Struts Filter for those NOT using Struts2 (recommended) -->
+	<filter>
+		<filter-name>uiServer</filter-name>
+		<filter-class>com.eidosmedia.template.ui.UIServer</filter-class>
+	</filter>
+	<!-- Struts Filter for those using Struts2 -->
+	<!-- filter> <filter-name>uiServer</filter-name> <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
+		</filter-class> </filter -->
+	<filter-mapping>
+		<filter-name>uiServer</filter-name>
+		<url-pattern>/actions/*</url-pattern>
+	</filter-mapping>
+
+	<!-- User Interface Server -->
+	<filter>
+		<filter-name>staticServer</filter-name>
+		<filter-class>com.eidosmedia.template.ui.StaticServer</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>staticServer</filter-name>
+		<url-pattern>/struts/*</url-pattern>
+	</filter-mapping>
+
+
+	<!-- JSF mapping -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- Map these files with JSF -->
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<description>Output Manager servlet</description>
+		<display-name>om</display-name>
+		<servlet-name>om</servlet-name>
+		<servlet-class>com.eidosmedia.om.OmServlet</servlet-class>
+
+		<!-- Ajout ORO -->
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>/WEB-INF/config/config.xml</param-value>
+		</init-param>
+		<!-- FIN Ajout ORO -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>om</servlet-name>
+		<url-pattern>/om</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description></description>
+		<display-name>query</display-name>
+		<servlet-name>query</servlet-name>
+		<servlet-class>com.eidosmedia.om.web.QueryServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>query</servlet-name>
+		<url-pattern>/query/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description></description>
+		<display-name>ContentServlet</display-name>
+		<servlet-name>ContentServlet</servlet-name>
+		<servlet-class>com.eidosmedia.om.web.ContentServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ContentServlet</servlet-name>
+		<url-pattern>/content/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ContentServlet</servlet-name>
+		<url-pattern>/config/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description>Show Log</description>
+		<display-name>ShowLogServlet</display-name>
+		<servlet-name>ShowLogServlet</servlet-name>
+		<servlet-class>com.eidosmedia.om.web.ShowLogServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ShowLogServlet</servlet-name>
+		<url-pattern>/showlog/*</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+      <servlet-name>TemplateIndex</servlet-name>
+      <jsp-file>/WEB-INF/jsp/index.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TemplateIndex</servlet-name>
+		<url-pattern>/web-app-template/*</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>
