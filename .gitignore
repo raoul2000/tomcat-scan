@@ -5,6 +5,7 @@ npm-debug.log*
 
 # test config
 /test/config.json
+/test/output/**
 
 # Runtime data
 pids

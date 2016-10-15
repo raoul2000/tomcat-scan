@@ -11,7 +11,7 @@ var tomcatProps = require('./tomcat/properties'),
 function scanTomcat(conn, installDir, xmlEntities) {
   var scanResult = {
     "properties" : null,
-    "context" :  null
+    "context"    : null
   };
 
   return tomcatProps.extractTomcatProperties(conn,installDir)
@@ -21,6 +21,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
   })
   .then(function(tcConfigFile){
     var context = [];
+    scanResult.config = tcConfigFile;
     if( tcConfigFile.content.success ) {
       var configDOM = xmlParser.parse(tcConfigFile.content.value, xmlEntities);
       if( configDOM.success) {
@@ -45,22 +46,23 @@ function scanTomcat(conn, installDir, xmlEntities) {
           return readFile.readFileContent(conn, descFilePath)
           .then(function(descFileContent){
             aContext.descriptor = descFileContent;
-            if(aContext.descriptor.success === true) {
-              var dom = xmlParser.parse(aContext.descriptor.value, xmlEntities);
+            if(aContext.descriptor.content.success === true) {
+              var dom = xmlParser.parse(aContext.descriptor.content.value, xmlEntities);
               if( dom.success === true ) {
                 aContext.descriptor.servlet = descriptor.getAllServlet(dom.document);
               } else {
                 aContext.descriptor.servlet = dom.error;
               }
             }
+            return aContext;
           });
         };
       });
       return promise.allSettledInSequence(descriptorLoadTasks);
   })
   .then(function(result){
-    fs.writeFileSync(__dirname + '/scanResult.json',JSON.stringify(scanResult), 'utf-8');
-    fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
+    //fs.writeFileSync(__dirname + '/scanResult.json',JSON.stringify(scanResult), 'utf-8');
+    //fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
     return scanResult;
   });
 }

@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
 
-	<display-name>EidosMedia OutputManager Servlet</display-name>
+	<display-name>company OutputManager Servlet</display-name>
 	<welcome-file-list>
 		<welcome-file>default.html</welcome-file>
 	</welcome-file-list>
@@ -13,14 +13,14 @@
 
 
 	<listener>
-		<listener-class>com.eidosmedia.template.TemplateInitializer</listener-class>
+		<listener-class>com.company.template.TemplateInitializer</listener-class>
 	</listener>
 	<servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>com.eidosmedia.rest.applications.TemplateApplication</param-value>
+			<param-value>com.company.rest.applications.TemplateApplication</param-value>
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
@@ -31,7 +31,7 @@
 
 	<filter>
 		<filter-name>TemplateStatsFilter</filter-name>
-		<filter-class>com.eidosmedia.template.TemplateStatsFilter</filter-class>
+		<filter-class>com.company.template.TemplateStatsFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>TemplateStatsFilter</filter-name>
@@ -42,7 +42,7 @@
 	<!-- Struts Filter for those NOT using Struts2 (recommended) -->
 	<filter>
 		<filter-name>uiServer</filter-name>
-		<filter-class>com.eidosmedia.template.ui.UIServer</filter-class>
+		<filter-class>com.company.template.ui.UIServer</filter-class>
 	</filter>
 	<!-- Struts Filter for those using Struts2 -->
 	<!-- filter> <filter-name>uiServer</filter-name> <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
@@ -55,7 +55,7 @@
 	<!-- User Interface Server -->
 	<filter>
 		<filter-name>staticServer</filter-name>
-		<filter-class>com.eidosmedia.template.ui.StaticServer</filter-class>
+		<filter-class>com.company.template.ui.StaticServer</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>staticServer</filter-name>
@@ -84,7 +84,7 @@
 		<description>Output Manager servlet</description>
 		<display-name>om</display-name>
 		<servlet-name>om</servlet-name>
-		<servlet-class>com.eidosmedia.om.OmServlet</servlet-class>
+		<servlet-class>com.company.om.OmServlet</servlet-class>
 
 		<!-- Ajout ORO -->
 		<init-param>
@@ -102,7 +102,7 @@
 		<description></description>
 		<display-name>query</display-name>
 		<servlet-name>query</servlet-name>
-		<servlet-class>com.eidosmedia.om.web.QueryServlet</servlet-class>
+		<servlet-class>com.company.om.web.QueryServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>query</servlet-name>
@@ -112,7 +112,7 @@
 		<description></description>
 		<display-name>ContentServlet</display-name>
 		<servlet-name>ContentServlet</servlet-name>
-		<servlet-class>com.eidosmedia.om.web.ContentServlet</servlet-class>
+		<servlet-class>com.company.om.web.ContentServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ContentServlet</servlet-name>
@@ -126,7 +126,7 @@
 		<description>Show Log</description>
 		<display-name>ShowLogServlet</display-name>
 		<servlet-name>ShowLogServlet</servlet-name>
-		<servlet-class>com.eidosmedia.om.web.ShowLogServlet</servlet-class>
+		<servlet-class>com.company.om.web.ShowLogServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ShowLogServlet</servlet-name>

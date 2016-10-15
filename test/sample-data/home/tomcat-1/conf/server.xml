@@ -46,8 +46,8 @@
     <Resource pathname="conf/services.properties"
               description="Commons Methode services configuration"
               name="em/Configuration"
-              type="com.eidosmedia.commons.servicesconf.PropertiesFactory"
-              factory="com.eidosmedia.commons.servicesconf.PropertiesFactory" />
+              type="com.company.commons.servicesconf.PropertiesFactory"
+              factory="com.company.commons.servicesconf.PropertiesFactory" />
   </GlobalNamingResources>
 
   <!-- A "Service" is a collection of one or more "Connectors" that share
@@ -142,6 +142,8 @@
 
         <Context docBase="&HOME;/webapp-A" path="/www-A" reloadable="false">
            <ResourceLink global="em/Configuration" name="em/Configuration" type="java.util.Properties"/>
+        </Context>
+        <Context docBase="&HOME;/webapp-B" path="/www-B" reloadable="false">
         </Context>
       </Host>
     </Engine>
