@@ -140,7 +140,7 @@
                prefix="localhost_access_log" suffix=".txt"
                pattern="%h %l %u %t &quot;%r&quot; %s %b" />
 
-        <Context docBase="&HOME;/webApp-A" path="/www-A" reloadable="false">
+        <Context docBase="&HOME;/webapp-A" path="/www-A" reloadable="false">
            <ResourceLink global="em/Configuration" name="em/Configuration" type="java.util.Properties"/>
         </Context>
       </Host>

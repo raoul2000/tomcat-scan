@@ -4,6 +4,7 @@ var tomcatProps = require('./tomcat/properties'),
     xmlParser   = require('../src/helper/xml-parser'),
     promise     = require('../src/helper/promise'),
     config      = require('../src/tomcat/config'),
+    fs 			    = require('fs'),
     descriptor  = require('../src/tomcat/servlet/descriptor'),
     readFile    = require("ssh-utils").readFile;
 
@@ -18,12 +19,12 @@ function scanTomcat(conn, installDir, xmlEntities) {
     scanResult.properties = tomcatProperties;
     return readFile.readFileContent(conn, installDir+'/conf/server.xml');
   })
-  .then(function(configFileContent){
+  .then(function(tcConfigFile){
     var context = [];
-    if( configFileContent.success ) {
-      var configDOM = xmlParser.parse(configFileContent, xmlEntities);
+    if( tcConfigFile.content.success ) {
+      var configDOM = xmlParser.parse(tcConfigFile.content.value, xmlEntities);
       if( configDOM.success) {
-        context = config.getAllContext(configDOM);
+        context = config.getAllContext(configDOM.document);
         scanResult.context  = {
           "success" : true,
           "value" : context
@@ -41,7 +42,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
       var descriptorLoadTasks = context.map(function(aContext){
         var  descFilePath = aContext.docBase.concat('/WEB-INF/web.xml');
         return function(){
-          return readFile(conn, descFilePath)
+          return readFile.readFileContent(conn, descFilePath)
           .then(function(descFileContent){
             aContext.descriptor = descFileContent;
             if(aContext.descriptor.success === true) {
@@ -58,6 +59,8 @@ function scanTomcat(conn, installDir, xmlEntities) {
       return promise.allSettledInSequence(descriptorLoadTasks);
   })
   .then(function(result){
+    fs.writeFileSync(__dirname + '/scanResult.json',JSON.stringify(scanResult), 'utf-8');
+    fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
     return scanResult;
   });
 }
