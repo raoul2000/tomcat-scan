@@ -23,7 +23,6 @@ var Q        = require('q'),
 function extractTomcatProperties(conn, tomcatinstallDir) {
 
 	var finalResult = {
-		"installDir"  : tomcatinstallDir,
 		"properties"  : null
 	};
 	// another option would be to invoke the script tomcatinstallDir/bin/version.sh
