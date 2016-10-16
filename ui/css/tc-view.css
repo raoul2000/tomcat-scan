@@ -1,0 +1,19 @@
+.tc-title-row > td {
+  background-color: #EEE;
+}
+
+.tc-name {
+  font-size:150%;
+  margin-left: 10px;
+}
+.tc-property-summary {
+  margin-bottom: 0px;
+  font-size:80%;
+}
+.servlet-longname {
+  font-weight: bold;
+}
+table.tc-properties {
+  font-size:80%;
+  font-family: sans-serif;
+}
