@@ -26,12 +26,12 @@ function scanTomcat(conn, installDir, xmlEntities) {
       var configDOM = xmlParser.parse(tcConfigFile.content.value, xmlEntities);
       if( configDOM.success) {
         context = config.getAllContext(configDOM.document);
-        scanResult.context  = {
+        scanResult.config.context  = {
           "success" : true,
           "value" : context
         };
       } else {
-        scanResult.context  = {
+        scanResult.config.context  = {
           "success" : false,
           "error" : configDOM.error
         };
@@ -62,7 +62,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
   })
   .then(function(result){
     //fs.writeFileSync(__dirname + '/scanResult.json',JSON.stringify(scanResult), 'utf-8');
-    //fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
+    fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
     return scanResult;
   });
 }
