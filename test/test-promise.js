@@ -44,7 +44,7 @@ describe('Util Promise',function(done){
 			//console.log(result);
 			assert.isArray(result);
 			assert.lengthOf(result,3);
-
+/*
 			assert.deepEqual(result[0],{
 				"command" : '__whoami',
   			"success" : false,
@@ -57,11 +57,12 @@ describe('Util Promise',function(done){
   			"error" 	: { "stderr": 'bash: __whoami: command not found\n', "code": 127 },
   			"value" 	: null
 			});
+*/
 			assert.deepEqual(result[2],{
 				"command": 'whoami',
     		"success": true,
     		"error": null,
-    		"value": 'meth01\n'
+    		"value": connection.user + '\n'
 			});
 
 			done();
