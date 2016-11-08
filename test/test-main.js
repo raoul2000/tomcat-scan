@@ -17,7 +17,7 @@ describe('Scans a configuration for tomcat-1',function(done){
 	it('scan tomcat config',function(done){
 		return tc.scanTomcat(connection, config.home + '/tomcat-1',entity)
 		.then(function(result){
-			console.log(result);
+			//console.log(result);
 			fs.writeFileSync(__dirname + '/output/test-main-scanResult.json',JSON.stringify(result), 'utf-8');
 			done();
 		})

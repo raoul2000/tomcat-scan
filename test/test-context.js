@@ -1,13 +1,15 @@
 "use strict";
 
-var config  	= require('../src/tomcat/config'),
+var context  	= require('../src/tomcat/context'),
 	  xmlParser = require('../src/helper/xml-parser'),
 		fs 			  = require('fs'),
 	  assert  	= require('chai').assert;
 
 var cfg = {};
 
-describe('Tomcat config',function(done){
+describe('Tomcat context',function(done){
+
+	this.timeout(10000);
 
 	before(function() {
     cfg = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf-8" ));
@@ -23,7 +25,7 @@ describe('Tomcat config',function(done){
 		);
 		assert.isTrue(domConfig.success);
 
-		var result = config.getAllContext(domConfig.document);
+		var result = context.getContextsFromDOM(domConfig.document);
 		//console.log(result);
 		assert.isTrue(result[0].path == "path1");
 		assert.isTrue(result[1].path == "path2");
@@ -35,15 +37,33 @@ describe('Tomcat config',function(done){
 		done();
 	});
 
-	it('read individual contexts',function(done){
-		var folderPath = cfg.home + '/tomcat-1/conf/Catalina/localhost';
-		return config.getIndividualContextList(cfg.sshConnection,folderPath,{})
+	it('read individual contexts from a file',function(done){
+		var folderPath = cfg.home + '/tomcat-1/conf/Catalina/localhost/webapp-C.xml';
+		return context.getContextsFromFile(cfg.sshConnection,folderPath,{
+			"HOME" : "/home/folder"
+		})
 		.then(function(result){
-
+			console.log(result);
 			done();
 		})
 		.done(null, function(err){
 			done(err);
 		});
+	});
+
+
+	it('read context from files in a folder', function(done){
+		var folderPath = cfg.home + '/tomcat-1/conf/Catalina/localhost';
+		return context.getContextsFromFolder(cfg.sshConnection, folderPath, {
+			HOME : "/home/folder"
+		})
+		.then(function(result){
+			console.log(result);
+			done();
+		})
+		.done(null, function(err){
+			done(err);
+		});
+
 	});
 });

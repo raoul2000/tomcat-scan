@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+
+	<display-name>My Servlet C</display-name>
+	<welcome-file-list>
+		<welcome-file>default.html</welcome-file>
+	</welcome-file-list>
+
+	<listener>
+		<listener-class>com.company.template.TemplateInitializer</listener-class>
+	</listener>
+	<servlet>
+		<servlet-name>Super Cool Web Application</servlet-name>
+		<servlet-class>org.turtle.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>com.company.rest.applications.TemplateApplication</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Super Cool Web Application</servlet-name>
+		<url-pattern>/service/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>

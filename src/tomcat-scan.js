@@ -11,12 +11,24 @@ var tomcatProps = require('./tomcat/properties'),
 function scanTomcat(conn, installDir, xmlEntities) {
   var scanResult = {
     "properties" : null,
-    "context"    : null
+    "config"    : null
   };
 
   return tomcatProps.extractTomcatProperties(conn,installDir)
   .then(function(tomcatProperties){
-    scanResult.properties = tomcatProperties;
+    if(tomcatProperties.success) {
+      scanResult.properties = {
+        "success" : true,
+        "value" : tomcatProperties.value
+      };
+    } else {
+      scanResult.properties = {
+        "success" : false,
+        "error" : tomcatProperties.error,
+        "value" : null,
+      };
+    }
+    //scanResult.properties = tomcatProperties;
     return readFile.readFileContent(conn, installDir+'/conf/server.xml');
   })
   .then(function(tcConfigFile){
@@ -38,6 +50,9 @@ function scanTomcat(conn, installDir, xmlEntities) {
       }
     }
     return context;
+  })
+  .then(function(context){
+    return config.getIndividualContextList(conn, installDir + '/conf/Catalina/localhost', xmlEntities);
   })
   .then(function(context){
       var descriptorLoadTasks = context.map(function(aContext){
