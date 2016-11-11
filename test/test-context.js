@@ -58,11 +58,11 @@ describe('Tomcat context',function(done){
 			HOME : "/home/folder"
 		})
 		.then(function(result){
-			console.log(result);
+			//console.log(result);
 			done();
 		})
 		.done(null, function(err){
-			done(err);
+			//done(err);
 		});
 
 	});

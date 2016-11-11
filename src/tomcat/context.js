@@ -41,27 +41,28 @@ exports.getContextsFromDOM = getContextsFromDOM;
  * @return {object}             Promisifies result
  */
 function getContextsFromFile(conn, filePath, xmlEntities) {
-  // read file content parse  to DOM and read contexts
-  //
-  return sshUtils.readFile.readFileContent(conn,filePath)
-  .then(function(fileContent){
-    console.log(fileContent);
-    var result;
-    var configDOM = xmlParser.parse(fileContent.content.value, xmlEntities);
-    if( configDOM.success) {
-      getContextsFromDOM(configDOM.document);
-      result  = {
-        "success" : true,
-        "value"   : getContextsFromDOM(configDOM.document)
-      };
-    } else {
-      result  = {
-        "success" : false,
-        "error"   : configDOM.error
-      };
+
+  // -----------------
+  var parseFileContent = function(fileContent) {
+    if( fileContent.success === false) {
+      throw new Error("failed  to read file content");
     }
-    return result;
-  });
+
+    var dom = xmlParser.parse(fileContent.value, xmlEntities);
+    if(dom.success) {
+      return dom;
+    } else {
+      throw dom.error;
+    }
+  };
+
+  var callGetContextsFromDOM = function(dom) {
+    return  getContextsFromDOM(dom.value);
+  };
+  // ===================
+  return sshUtils.readFile.readFileContent(conn,filePath)
+  .then(parseFileContent)
+  .then(callGetContextsFromDOM);
 }
 exports.getContextsFromFile = getContextsFromFile;
 
@@ -77,7 +78,16 @@ function getContextsFromFolder(conn, folderPath, xmlEntities) {
 
   return sshUtils.exec.command(conn, "ls "+folderPath+"/*.xml")
   .then(function(lsOutput){
-    var tasks = lsOutput.value.split('\n').map(function(filePath){
+    var out = lsOutput.value.split('\n');
+    console.log("out = ");
+    console.log(out);
+    var tasks = lsOutput.value.split('\n')
+    .filter(function(filePath){
+      return true;
+      //return filePath.length  !== 0;
+    })
+    .map(function(filePath){
+
       return function() {
         console.log("reading "+filePath);
         return getContextsFromFile(conn, filePath, xmlEntities);
