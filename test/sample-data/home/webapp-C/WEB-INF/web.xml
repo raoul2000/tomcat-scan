@@ -25,5 +25,4 @@
 		<servlet-name>Super Cool Web Application</servlet-name>
 		<url-pattern>/service/*</url-pattern>
 	</servlet-mapping>
-
 </web-app>
