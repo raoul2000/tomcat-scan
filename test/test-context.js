@@ -15,7 +15,7 @@ describe('Tomcat context',function(done){
     cfg = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf-8" ));
   });
 
-	it('extract tomcat context from config DOM',function(done){
+	it('extracts tomcat context from config DOM',function(done){
 
 		var domConfig = xmlParser.parse(
 			"<doc>" +
@@ -37,13 +37,13 @@ describe('Tomcat context',function(done){
 		done();
 	});
 
-	it('read individual contexts from a file',function(done){
+	it('reads individual contexts from a file',function(done){
 		var folderPath = cfg.home + '/tomcat-1/conf/Catalina/localhost/webapp-C.xml';
 		return context.getContextsFromFile(cfg.sshConnection,folderPath,{
 			"HOME" : "/home/folder"
 		})
 		.then(function(result){
-			console.log(result);
+			//console.log(result);
 			done();
 		})
 		.done(null, function(err){
@@ -52,13 +52,13 @@ describe('Tomcat context',function(done){
 	});
 
 
-	it('read context from files in a folder', function(done){
+	it('reads context from files in a folder', function(done){
 		var folderPath = cfg.home + '/tomcat-1/conf/Catalina/localhost';
 		return context.getContextsFromFolder(cfg.sshConnection, folderPath, {
 			HOME : "/home/folder"
 		})
 		.then(function(result){
-			//console.log(result);
+			console.log(result);
 			done();
 		})
 		.done(null, function(err){

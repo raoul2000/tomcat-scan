@@ -1,3 +1,0 @@
-<Context docBase="&HOME;/webapp-C" path="/www-C" reloadable="false">
-   <ResourceLink global="em/Configuration" name="em/Configuration" type="java.util.Properties"/>
-</Context>

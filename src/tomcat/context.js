@@ -57,10 +57,10 @@ function getContextsFromFile(conn, filePath, xmlEntities) {
   };
 
   var callGetContextsFromDOM = function(dom) {
-    return  getContextsFromDOM(dom.value);
+    return  getContextsFromDOM(dom.document);
   };
   // ===================
-  return sshUtils.readFile.readFileContent(conn,filePath)
+  return sshUtils.readFileContent(conn,filePath)
   .then(parseFileContent)
   .then(callGetContextsFromDOM);
 }
@@ -78,16 +78,12 @@ function getContextsFromFolder(conn, folderPath, xmlEntities) {
 
   return sshUtils.exec.command(conn, "ls "+folderPath+"/*.xml")
   .then(function(lsOutput){
-    var out = lsOutput.value.split('\n');
-    console.log("out = ");
-    console.log(out);
-    var tasks = lsOutput.value.split('\n')
+    var tasks = lsOutput.value
+    .split('\n')
     .filter(function(filePath){
-      return true;
-      //return filePath.length  !== 0;
+      return filePath.length  !== 0;
     })
     .map(function(filePath){
-
       return function() {
         console.log("reading "+filePath);
         return getContextsFromFile(conn, filePath, xmlEntities);
