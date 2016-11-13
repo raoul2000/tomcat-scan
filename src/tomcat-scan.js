@@ -4,7 +4,9 @@ var tomcatProps = require('./tomcat/properties'),
     xmlParser   = require('../src/helper/xml-parser'),
     promise     = require('../src/helper/promise'),
     config      = require('../src/tomcat/config'),
+    context      = require('../src/tomcat/context'),
     fs 			    = require('fs'),
+    Q 			    = require('q'),
     descriptor  = require('../src/tomcat/servlet/descriptor'),
     readFileContent = require("ssh-utils").readFileContent;
 
@@ -30,28 +32,32 @@ function scanTomcat(conn, installDir, xmlEntities) {
       };
     }
     //scanResult.properties = tomcatProperties;
-    return readFile.readFileContent(conn, installDir+'/conf/server.xml');
+    return true;
+    //return readFileContent(conn, installDir+'/conf/server.xml');
   })
-  .then(function(tcConfigFile){
-    var context = [];
-    scanResult.config = tcConfigFile.value;
-      var configDOM = xmlParser.parse(tcConfigFile.value, xmlEntities);
-      if( configDOM.success) {
-        context = config.getAllContext(configDOM.document);
-        scanResult.config.context  = {
-          "success" : true,
-          "value" : context
-        };
-      } else {
-        scanResult.config.context  = {
-          "success" : false,
-          "error" : configDOM.error
-        };
-    }
-    return context;
-  })
-  .then(function(context){
-    return config.getIndividualContextList(conn, installDir + '/conf/Catalina/localhost', xmlEntities);
+  .then(function(result){
+    var contextList = [];
+
+    var getContextFromConfig = function() {
+      return context.getContextsFromFile(conn, installDir+'/conf/server.xml', xmlEntities)
+      .then(function(result){
+        contextList.push(result);
+      });
+    };
+
+    var getIndividualContextList = function() {
+      return context.getContextsFromFolder(conn, installDir + '/conf/Catalina/localhost', xmlEntities)
+      .then(function(result){
+        contextList.push(result);
+      });
+    };
+
+    return Q.fcall(getContextFromConfig)
+    .then(getIndividualContextList)
+    .then(function(result){
+      console.log(contextList);
+      return contextList;
+    });
   })
   .then(function(context){
       var descriptorLoadTasks = context.map(function(aContext){
