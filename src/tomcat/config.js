@@ -1,4 +1,5 @@
 "use strict";
+var sshUtils = require("ssh-utils");
 
 /**
  * Extract context informations from a tomcat server configuration XML string passed as argument.
@@ -26,3 +27,24 @@ function getAllContext(dom) {
   return contexts;
 }
 exports.getAllContext = getAllContext;
+
+
+
+
+function getIndividualContextList(conn, folderPath, xmlEntities) {
+  return sshUtils.exec.command(conn, "ls " + folderPath+ "/*.xml")
+  .then(function(contextFileList){
+    if(contextFileList.success) {
+      console.log(contextFileList);
+      var processContextTasks = [];
+      contextFileList.value.split('\n').forEach(function(contextFilePath){
+        processContextTasks.push(
+          function(){
+          }
+        );
+      });
+    }
+  });
+
+}
+exports.getIndividualContextList = getIndividualContextList;

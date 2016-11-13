@@ -4,4 +4,5 @@
     "username": "bobMarley",
     "password" : "redemption"
   }
+  "home" : "/root/home/tomcat-scan/test/sample-data/home"
 }

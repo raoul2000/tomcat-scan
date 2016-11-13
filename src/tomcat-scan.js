@@ -11,13 +11,26 @@ var tomcatProps = require('./tomcat/properties'),
 function scanTomcat(conn, installDir, xmlEntities) {
   var scanResult = {
     "properties" : null,
-    "context"    : null
+    "config"    : null
   };
 
   return tomcatProps.extractTomcatProperties(conn,installDir)
   .then(function(tomcatProperties){
-    scanResult.properties = tomcatProperties;
-    return readFileContent(conn, installDir+'/conf/server.xml');
+
+    if(tomcatProperties.success) {
+      scanResult.properties = {
+        "success" : true,
+        "value" : tomcatProperties.value
+      };
+    } else {
+      scanResult.properties = {
+        "success" : false,
+        "error" : tomcatProperties.error,
+        "value" : null,
+      };
+    }
+    //scanResult.properties = tomcatProperties;
+    return readFile.readFileContent(conn, installDir+'/conf/server.xml');
   })
   .then(function(tcConfigFile){
     var context = [];
@@ -25,17 +38,20 @@ function scanTomcat(conn, installDir, xmlEntities) {
       var configDOM = xmlParser.parse(tcConfigFile.value, xmlEntities);
       if( configDOM.success) {
         context = config.getAllContext(configDOM.document);
-        scanResult.context  = {
+        scanResult.config.context  = {
           "success" : true,
           "value" : context
         };
       } else {
-        scanResult.context  = {
+        scanResult.config.context  = {
           "success" : false,
           "error" : configDOM.error
         };
     }
     return context;
+  })
+  .then(function(context){
+    return config.getIndividualContextList(conn, installDir + '/conf/Catalina/localhost', xmlEntities);
   })
   .then(function(context){
       var descriptorLoadTasks = context.map(function(aContext){
@@ -60,7 +76,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
   })
   .then(function(result){
     //fs.writeFileSync(__dirname + '/scanResult.json',JSON.stringify(scanResult), 'utf-8');
-    //fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
+    fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
     return scanResult;
   })
   /*

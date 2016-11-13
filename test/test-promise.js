@@ -64,7 +64,6 @@ describe('Util Promise',function(done){
     		"error": null,
     		"value": connection.user + '\n'
 			});
-
 			done();
 		})
 		.done(null,function(err){
