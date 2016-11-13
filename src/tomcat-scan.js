@@ -6,7 +6,7 @@ var tomcatProps = require('./tomcat/properties'),
     config      = require('../src/tomcat/config'),
     fs 			    = require('fs'),
     descriptor  = require('../src/tomcat/servlet/descriptor'),
-    readFile    = require("ssh-utils").readFile;
+    readFileContent = require("ssh-utils").readFileContent;
 
 function scanTomcat(conn, installDir, xmlEntities) {
   var scanResult = {
@@ -17,13 +17,12 @@ function scanTomcat(conn, installDir, xmlEntities) {
   return tomcatProps.extractTomcatProperties(conn,installDir)
   .then(function(tomcatProperties){
     scanResult.properties = tomcatProperties;
-    return readFile.readFileContent(conn, installDir+'/conf/server.xml');
+    return readFileContent(conn, installDir+'/conf/server.xml');
   })
   .then(function(tcConfigFile){
     var context = [];
-    scanResult.config = tcConfigFile;
-    if( tcConfigFile.content.success ) {
-      var configDOM = xmlParser.parse(tcConfigFile.content.value, xmlEntities);
+    scanResult.config = tcConfigFile.value;
+      var configDOM = xmlParser.parse(tcConfigFile.value, xmlEntities);
       if( configDOM.success) {
         context = config.getAllContext(configDOM.document);
         scanResult.context  = {
@@ -35,7 +34,6 @@ function scanTomcat(conn, installDir, xmlEntities) {
           "success" : false,
           "error" : configDOM.error
         };
-      }
     }
     return context;
   })
@@ -43,7 +41,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
       var descriptorLoadTasks = context.map(function(aContext){
         var  descFilePath = aContext.docBase.concat('/WEB-INF/web.xml');
         return function(){
-          return readFile.readFileContent(conn, descFilePath)
+          return readFileContent(conn, descFilePath)
           .then(function(descFileContent){
             aContext.descriptor = descFileContent;
             if(aContext.descriptor.content.success === true) {
@@ -64,7 +62,13 @@ function scanTomcat(conn, installDir, xmlEntities) {
     //fs.writeFileSync(__dirname + '/scanResult.json',JSON.stringify(scanResult), 'utf-8');
     //fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
     return scanResult;
-  });
+  })
+  /*
+  .fail(function(err){
+    console.error("error !");
+    console.error(err);
+  })
+  */;
 }
 
 exports.scanTomcat = scanTomcat;

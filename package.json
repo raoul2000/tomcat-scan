@@ -27,6 +27,6 @@
   "dependencies": {
     "xmldom": "^0.1.22",
     "q": "1.4.1",
-    "ssh-utils" : "1.0.2"
+    "ssh-utils" : "1.0.3"
   }
 }
