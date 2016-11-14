@@ -34,6 +34,17 @@ exports.getContextsFromDOM = getContextsFromDOM;
 
 /**
  * Create a list of context from a file.
+ * Returns an object with following properties :
+ * Example :
+ * {
+ *  file : the value of the filepath argument
+ *  contexts : [
+ *    {'path':'/path, 'docBase' : '/doc/base/path'},
+ *    {'path':'/path, 'docBase' : '/doc/base/path'},
+ *    {'path':'/path, 'docBase' : '/doc/base/path'}
+ *  ]
+ * }
+ *
  *
  * @param  {object} conn        connection settings
  * @param  {string} filePath    absolute path to the file to analyze
@@ -47,12 +58,11 @@ function getContextsFromFile(conn, filePath, xmlEntities) {
     if( fileContent.success === false) {
       throw new Error("failed  to read file content");
     }
-
-    var dom = xmlParser.parse(fileContent.value, xmlEntities);
-    if(dom.success) {
-      return dom;
-    } else {
-      throw dom.error;
+    
+    try {
+      return xmlParser.parse(fileContent.value, xmlEntities);
+    } catch (err) {
+      throw err;
     }
   };
 
@@ -62,12 +72,27 @@ function getContextsFromFile(conn, filePath, xmlEntities) {
   // ===================
   return sshUtils.readFileContent(conn,filePath)
   .then(parseFileContent)
-  .then(callGetContextsFromDOM);
+  .then(callGetContextsFromDOM)
+  .then(function(contextList){
+    return {
+      "file" : filePath,
+      "contexts" : contextList
+    };
+  })
+  .fail(function(error){
+    return {
+      "file" : filePath,
+      "contexts" : [],
+      "error" : error
+    };
+  });
 }
 exports.getContextsFromFile = getContextsFromFile;
 
 /**
  * Load context from files located in a folder.
+ * Returns an Array containing extracted contexts for each file in the folder.
+ * (see getContextsFromFile)
  *
  * @param  {object} conn        connection settings
  * @param  {string} filePath    absolute path to the file to analyze
@@ -85,11 +110,16 @@ function getContextsFromFolder(conn, folderPath, xmlEntities) {
     })
     .map(function(filePath){
       return function() {
-        console.log("reading "+filePath);
         return getContextsFromFile(conn, filePath, xmlEntities);
       };
     });
-    return promise.allSettledInSequence(tasks);
+
+    return promise.allSettledInSequence(tasks)
+    .then(function(results){
+      return results.filter(function(result){
+        return result.length !== 0;
+      });
+    });
   });
 }
 

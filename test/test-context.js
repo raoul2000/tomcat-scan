@@ -27,13 +27,15 @@ describe('Tomcat context',function(done){
 
 		var result = context.getContextsFromDOM(domConfig.document);
 		//console.log(result);
-		assert.isTrue(result[0].path == "path1");
-		assert.isTrue(result[1].path == "path2");
 
-		assert.isTrue(result[0].docBase == "docBaseValue_1");
-		assert.isTrue(result[1].docBase == "docBaseValue_2");
-
+		assert.isArray(result);
 		assert.lengthOf(result,2);
+		assert.equal(result[0].path, "path1");
+		assert.equal(result[1].path, "path2");
+
+		assert.equal(result[0].docBase, "docBaseValue_1");
+		assert.equal(result[1].docBase, "docBaseValue_2");
+
 		done();
 	});
 
@@ -44,6 +46,32 @@ describe('Tomcat context',function(done){
 		})
 		.then(function(result){
 			//console.log(result);
+			assert.equal(result.file, folderPath);
+			assert.isArray(result.contexts);
+			assert.lengthOf(result.contexts, 1);
+
+			assert.equal(result.contexts[0].path, '/www-C');
+			assert.equal(result.contexts[0].docBase , '/home/folder/webapp-C');
+			done();
+		})
+		.done(null, function(err){
+			done(err);
+		});
+	});
+
+	it('returns empty list if the file contains no context',function(done){
+		var folderPath = cfg.home + '/tomcat-1/conf/Catalina/localhost/dummy.xml';
+		return context.getContextsFromFile(cfg.sshConnection,folderPath,{
+			"HOME" : "/home/folder"
+		})
+		.then(function(result){
+			console.log(result);
+			assert.equal(result.file, folderPath);
+			assert.isArray(result.contexts);
+			assert.lengthOf(result.contexts, 1);
+
+			assert.equal(result.contexts[0].path, '/www-C');
+			assert.equal(result.contexts[0].docBase , '/home/folder/webapp-C');
 			done();
 		})
 		.done(null, function(err){
@@ -58,11 +86,26 @@ describe('Tomcat context',function(done){
 			HOME : "/home/folder"
 		})
 		.then(function(result){
-			console.log(result);
+			//console.log(result);
+			assert.isArray(result);
+			assert.lengthOf(result, 3);
+
+			assert.equal(result[0].file, cfg.home + "/tomcat-1/conf/Catalina/localhost/dummy.xml");
+			assert.isArray(result[0].contexts);
+			assert.lengthOf(result[0].contexts, 0, "should found no context in this file");
+
+			assert.equal(result[1].file, cfg.home + "/tomcat-1/conf/Catalina/localhost/webapp-C.xml");
+			assert.isArray(result[1].contexts);
+			assert.lengthOf(result[1].contexts, 1);
+
+			assert.equal(result[2].file, cfg.home + "/tomcat-1/conf/Catalina/localhost/webapp-D.xml");
+			assert.isArray(result[2].contexts);
+			assert.lengthOf(result[2].contexts, 1);
+
 			done();
 		})
 		.done(null, function(err){
-			//done(err);
+			done(err);
 		});
 
 	});

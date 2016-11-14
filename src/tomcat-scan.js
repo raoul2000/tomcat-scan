@@ -48,7 +48,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
     var getIndividualContextList = function() {
       return context.getContextsFromFolder(conn, installDir + '/conf/Catalina/localhost', xmlEntities)
       .then(function(result){
-        contextList.push(result);
+        contextList.concat(result);
       });
     };
 

@@ -151,9 +151,11 @@ function parse( strXML , entities, entityResolverErrorHandler) {
     }
 
     if(result.success === true) {
-      result = parseNoEntities(strXML);
-    }
-    return result;
+      return parseNoEntities(strXML);
+    } else {
+			throw result.error;
+		}
+    //return result;
 }
 
 exports.parse = parse;
