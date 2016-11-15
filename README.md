@@ -29,8 +29,8 @@ Example :
 {
   "sshConnection" : {
     "host" : "127.0.0.1",
-    "user" : "bobMarley",
-    "pass" : "redemption"
+    "username" : "bobMarley",
+    "password" : "redemption"
   },
   "home" : "/root/home/tomcat-scan/test/sample-data/home"
 }
