@@ -23,9 +23,9 @@ describe('Tomcat context',function(done){
 				"<Context path=\"path2\" docBase=\"docBaseValue_2\">\n</Context>"+
 			"</doc>"
 		);
-		assert.isTrue(domConfig.success);
+		assert.isObject(domConfig);
 
-		var result = context.getContextsFromDOM(domConfig.document);
+		var result = context.getContextsFromDOM(domConfig);
 		//console.log(result);
 
 		assert.isArray(result);
@@ -65,13 +65,11 @@ describe('Tomcat context',function(done){
 			"HOME" : "/home/folder"
 		})
 		.then(function(result){
-			console.log(result);
+			//console.log(result);
 			assert.equal(result.file, folderPath);
 			assert.isArray(result.contexts);
-			assert.lengthOf(result.contexts, 1);
+			assert.lengthOf(result.contexts, 0);
 
-			assert.equal(result.contexts[0].path, '/www-C');
-			assert.equal(result.contexts[0].docBase , '/home/folder/webapp-C');
 			done();
 		})
 		.done(null, function(err){

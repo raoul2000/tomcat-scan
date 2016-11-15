@@ -38,11 +38,10 @@ describe('Descriptor',function(done){
 		);
 		assert.isNotNull(result);
 		assert.isObject(result);
-		assert.isNotNull(result.document);
-		assert.isObject(result.document);
-		assert.isTrue(result.success);
+		assert.isNotNull(result);
+		assert.isObject(result);
 
-		var servlet = descriptor.getAllServlet(result.document);
+		var servlet = descriptor.getAllServlet(result);
 		assert.isTrue( servlet.hasOwnProperty('checkin'));
 		assert.deepEqual(
 			servlet,
@@ -65,11 +64,10 @@ describe('Descriptor',function(done){
 
 		assert.isNotNull(result);
 		assert.isObject(result);
-		assert.isNotNull(result.document);
-		assert.isObject(result.document);
-		assert.isTrue(result.success);
+		assert.isNotNull(result);
+		assert.isObject(result);
 
-		var servlet = descriptor.getAllServlet(result.document);
+		var servlet = descriptor.getAllServlet(result);
 		assert.deepEqual(
 			servlet,
 			{
@@ -105,11 +103,10 @@ describe('Descriptor',function(done){
 
 		assert.isNotNull(result);
 		assert.isObject(result);
-		assert.isNotNull(result.document);
-		assert.isObject(result.document);
-		assert.isTrue(result.success);
+		assert.isNotNull(result);
+		assert.isObject(result);
 
-		var servlet = descriptor.getAllServlet(result.document);
+		var servlet = descriptor.getAllServlet(result);
 		//console.log(JSON.stringify(servlet));
 
 		done();

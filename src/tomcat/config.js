@@ -27,24 +27,3 @@ function getAllContext(dom) {
   return contexts;
 }
 exports.getAllContext = getAllContext;
-
-
-
-
-function getIndividualContextList(conn, folderPath, xmlEntities) {
-  return sshUtils.exec.command(conn, "ls " + folderPath+ "/*.xml")
-  .then(function(contextFileList){
-    if(contextFileList.success) {
-      console.log(contextFileList);
-      var processContextTasks = [];
-      contextFileList.value.split('\n').forEach(function(contextFilePath){
-        processContextTasks.push(
-          function(){
-          }
-        );
-      });
-    }
-  });
-
-}
-exports.getIndividualContextList = getIndividualContextList;

@@ -68,11 +68,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
             aContext.descriptor = descFileContent;
             if(aContext.descriptor.content.success === true) {
               var dom = xmlParser.parse(aContext.descriptor.content.value, xmlEntities);
-              if( dom.success === true ) {
-                aContext.descriptor.servlet = descriptor.getAllServlet(dom.document);
-              } else {
-                aContext.descriptor.servlet = dom.error;
-              }
+              aContext.descriptor.servlet = descriptor.getAllServlet(dom);
             }
             return aContext;
           });

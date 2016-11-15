@@ -20,31 +20,32 @@ describe('XML Parser',function(done){
 
 		assert.isNotNull(result);
 		assert.isObject(result);
-		assert.isNotNull(result.document);
-		assert.isObject(result.document);
-		assert.isTrue(result.success);
+		var contexts = result.getElementsByTagName("Context");
+		assert.lengthOf(contexts,  2);
+		assert.equal(contexts[0].getAttribute('path'), 'value1');
+		assert.equal(contexts[0].getAttribute('docBase'), 'docBaseValue_1');
+		assert.equal(contexts[1].textContent,'value2');
+
 		done();
 	});
 
-	it('returns error if there is unresolved entities',function(done){
+	it('throws exception if there is unresolved entities',function(done){
 
-		var result = xmlParser.parse(
-			"<doc>" +
+		try {
+			var result = xmlParser.parse(
+				"<doc>" +
 				"<Context path=\"&ENTITY_1;\" docBase=\"docBaseValue_1\">\n</Context>"+
 				"<Context >&ENTITY_2;</Context>"+
-			"</doc>",
-			{
-				"ENTITY_1" : "value1"
-			}
-		);
-
-		assert.isNotNull(result);
-		assert.isObject(result);
-		assert.isFalse(result.success);
-		assert.isNull(result.document);
-		assert.isObject(result.error);
-		assert.propertyVal(result.error, 'message', 'missing entities : ENTITY_2');
-		done();
+				"</doc>",
+				{
+					"ENTITY_1" : "value1"
+				}
+			);
+			assert.fail();
+		} catch (err) {
+			assert.equal(err.message,  'missing entities : ENTITY_2');
+			done();
+		}
 	});
 
 	it('unresolved entities are ignored by a user provided error handler',function(done){
@@ -64,24 +65,24 @@ describe('XML Parser',function(done){
 
 		assert.isNotNull(result);
 		assert.isObject(result);
-		assert.isTrue(result.success);
-		assert.isNotNull(result.document);
+		var contexts = result.getElementsByTagName("Context");
+		assert.lengthOf(contexts,  2);
+		assert.equal(contexts[0].getAttribute('path'), 'value1');
+		assert.isUndefined(contexts[1].text);
+
 		done();
 	});
 
-	it('returns error if the XML is not well formed',function(done){
-
-		var result = xmlParser.parse(
-			"<doc>" +
+	it('throws exception if the XML is not well formed',function(done){
+		try {
+			var result = xmlParser.parse(
+				"<doc>" +
 				"Context >value</Context>"+
-			"</doc>"
-		);
-
-		assert.isNotNull(result);
-		assert.isObject(result);
-		assert.isFalse(result.success);
-		assert.isNull(result.document);
-		assert.isNotNull(result.error);
-		done();
+				"</doc>"
+			);
+			assert.isTrue(false);
+		} catch (err) {
+			done();
+		}
 	});
 });

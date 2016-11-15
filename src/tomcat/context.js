@@ -58,16 +58,13 @@ function getContextsFromFile(conn, filePath, xmlEntities) {
     if( fileContent.success === false) {
       throw new Error("failed  to read file content");
     }
-    
-    try {
-      return xmlParser.parse(fileContent.value, xmlEntities);
-    } catch (err) {
-      throw err;
-    }
+    return xmlParser.parse(fileContent.value, xmlEntities);
   };
 
+
+
   var callGetContextsFromDOM = function(dom) {
-    return  getContextsFromDOM(dom.document);
+    return  getContextsFromDOM(dom);
   };
   // ===================
   return sshUtils.readFileContent(conn,filePath)
