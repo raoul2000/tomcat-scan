@@ -3,8 +3,7 @@
 var tomcatProps = require('./tomcat/properties'),
     xmlParser   = require('../src/helper/xml-parser'),
     promise     = require('../src/helper/promise'),
-    config      = require('../src/tomcat/config'),
-    context      = require('../src/tomcat/context'),
+    context     = require('../src/tomcat/context'),
     fs 			    = require('fs'),
     Q 			    = require('q'),
     descriptor  = require('../src/tomcat/servlet/descriptor'),
@@ -18,6 +17,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
 
   return tomcatProps.extractTomcatProperties(conn,installDir)
   .then(function(tomcatProperties){
+    console.log("properties");
 
     if(tomcatProperties.success) {
       scanResult.properties = {
@@ -39,16 +39,27 @@ function scanTomcat(conn, installDir, xmlEntities) {
     var contextList = [];
 
     var getContextFromConfig = function() {
+      console.log("getContextFromConfig");
       return context.getContextsFromFile(conn, installDir+'/conf/server.xml', xmlEntities)
       .then(function(result){
         contextList.push(result);
+        console.log("contect from config returned : ");
+        console.log(result);
+
+        console.log("1. contextList now contains "+contextList.length+" items");
       });
     };
 
     var getIndividualContextList = function() {
+      console.log("getIndividualContextList");
       return context.getContextsFromFolder(conn, installDir + '/conf/Catalina/localhost', xmlEntities)
       .then(function(result){
         contextList.concat(result);
+        console.log("getIndividualContextList returned : ");
+        console.log(result);
+
+        console.log("2. contextList now contains "+contextList.length+" items");
+
       });
     };
 
@@ -60,6 +71,14 @@ function scanTomcat(conn, installDir, xmlEntities) {
     });
   })
   .then(function(context){
+    console.log(context);
+    var contextList = context;
+    contextList.forEach(function(aContext){
+      console.log(
+          "file          : " + aContext.file +
+        "\ncontext found : " + aContext.contexts.length + "\n"
+      );
+    });
       var descriptorLoadTasks = context.map(function(aContext){
         var  descFilePath = aContext.docBase.concat('/WEB-INF/web.xml');
         return function(){

@@ -4,7 +4,6 @@ var promise   = require('../helper/promise'),
     xmlParser = require('../helper/xml-parser'),
     sshUtils  = require("ssh-utils");
 
-
 /**
  * Extract context informations from a tomcat server configuration XML string passed as argument.
  * Note that the XML string must NOT contain unresolved entities.
@@ -61,15 +60,15 @@ function getContextsFromFile(conn, filePath, xmlEntities) {
     return xmlParser.parse(fileContent.value, xmlEntities);
   };
 
-
-
+  // ------------------
   var callGetContextsFromDOM = function(dom) {
     return  getContextsFromDOM(dom);
   };
+
   // ===================
   return sshUtils.readFileContent(conn,filePath)
   .then(parseFileContent)
-  .then(callGetContextsFromDOM)
+  .then(getContextsFromDOM)
   .then(function(contextList){
     return {
       "file" : filePath,

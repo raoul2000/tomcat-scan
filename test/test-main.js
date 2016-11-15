@@ -12,7 +12,7 @@ var entity = {
 
 
 describe('Scans a configuration for tomcat-1',function(done){
-	this.timeout(5000);
+	this.timeout(10000);
 
 	it('scan tomcat config',function(done){
 		return tc.scanTomcat(connection, config.home + '/tomcat-1',entity)
