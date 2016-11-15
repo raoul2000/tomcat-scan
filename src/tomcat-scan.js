@@ -22,13 +22,13 @@ function scanTomcat(conn, installDir, xmlEntities) {
     if(tomcatProperties.success) {
       scanResult.properties = {
         "success" : true,
-        "value" : tomcatProperties.value
+        "value"   : tomcatProperties.value
       };
     } else {
       scanResult.properties = {
         "success" : false,
-        "error" : tomcatProperties.error,
-        "value" : null,
+        "error"   : tomcatProperties.error,
+        "value"   : null,
       };
     }
     //scanResult.properties = tomcatProperties;
@@ -36,39 +36,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
     //return readFileContent(conn, installDir+'/conf/server.xml');
   })
   .then(function(result){
-    var contextList = [];
-
-    var getContextFromConfig = function() {
-      console.log("getContextFromConfig");
-      return context.getContextsFromFile(conn, installDir+'/conf/server.xml', xmlEntities)
-      .then(function(result){
-        contextList.push(result);
-        console.log("contect from config returned : ");
-        console.log(result);
-
-        console.log("1. contextList now contains "+contextList.length+" items");
-      });
-    };
-
-    var getIndividualContextList = function() {
-      console.log("getIndividualContextList");
-      return context.getContextsFromFolder(conn, installDir + '/conf/Catalina/localhost', xmlEntities)
-      .then(function(result){
-        contextList.concat(result);
-        console.log("getIndividualContextList returned : ");
-        console.log(result);
-
-        console.log("2. contextList now contains "+contextList.length+" items");
-
-      });
-    };
-
-    return Q.fcall(getContextFromConfig)
-    .then(getIndividualContextList)
-    .then(function(result){
-      console.log(contextList);
-      return contextList;
-    });
+    return context.getContextsFromTomcatDir(conn,installDir, xmlEntities);
   })
   .then(function(context){
     console.log(context);

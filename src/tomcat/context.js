@@ -120,3 +120,18 @@ function getContextsFromFolder(conn, folderPath, xmlEntities) {
 }
 
 exports.getContextsFromFolder = getContextsFromFolder;
+
+function getContextsFromTomcatDir(conn, tomcatInstallDir, xmlEntities) {
+  var contextList = [];
+
+  return getContextsFromFile(conn, tomcatInstallDir + '/conf/server.xml', xmlEntities)
+  .then(function(result){
+    contextList.push(result);
+    return getContextsFromFolder(conn, tomcatInstallDir +  '/conf/Catalina/localhost');
+  })
+  .then(function(result){
+    return contextList.concat(result);
+  });
+
+}
+exports.getContextsFromTomcatDir = getContextsFromTomcatDir;
