@@ -127,7 +127,7 @@ function getContextsFromTomcatDir(conn, tomcatInstallDir, xmlEntities) {
   return getContextsFromFile(conn, tomcatInstallDir + '/conf/server.xml', xmlEntities)
   .then(function(result){
     contextList.push(result);
-    return getContextsFromFolder(conn, tomcatInstallDir +  '/conf/Catalina/localhost');
+    return getContextsFromFolder(conn, tomcatInstallDir +  '/conf/Catalina/localhost', xmlEntities);
   })
   .then(function(result){
     return contextList.concat(result);

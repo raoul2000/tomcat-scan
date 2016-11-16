@@ -95,20 +95,4 @@ describe('Descriptor',function(done){
 		);
 		done();
 	});
-
-	it('parse the deployement descriptor for output Manager',function(done){
-		var xmlStr = fs.readFileSync(__dirname + '/sample-data/web-om-1.xml','utf8');
-
-		var result = xmlParser.parse(xmlStr,{ "ENT" : "VAL"	}, function(ent){});
-
-		assert.isNotNull(result);
-		assert.isObject(result);
-		assert.isNotNull(result);
-		assert.isObject(result);
-
-		var servlet = descriptor.getAllServlet(result);
-		//console.log(JSON.stringify(servlet));
-
-		done();
-	});
 });
