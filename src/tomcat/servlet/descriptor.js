@@ -28,7 +28,7 @@ function getAllServlet(dom) {
 
     servletList[servletName] = {
       "name"        : servletName,
-      "url-pattern" : null,
+      "urlPattern" : null,
       "class"       : null  // not all servlet have a servlet-class
     };
     servletClassList = elementList[i].getElementsByTagName('servlet-class');
@@ -41,7 +41,7 @@ function getAllServlet(dom) {
   for(var j=0; j<elementList.length; j ++) {
     servletName = elementList[j].getElementsByTagName('servlet-name').item(0).firstChild.nodeValue;
     if( servletList.hasOwnProperty(servletName)) {
-      servletList[servletName]["url-pattern"] = elementList[j].getElementsByTagName('url-pattern').item(0).firstChild.nodeValue;
+      servletList[servletName]["urlPattern"] = elementList[j].getElementsByTagName('url-pattern').item(0).firstChild.nodeValue;
     }
   }
   return servletList;

@@ -47,7 +47,7 @@ describe('Descriptor',function(done){
 			servlet,
 			{
 				"checkin":{
-					"url-pattern":"/servlet/checkin",
+					"urlPattern":"/servlet/checkin",
 					"name" : "checkin",
 					"class":"checkin.CheckinServlet"
 				}
@@ -72,22 +72,22 @@ describe('Descriptor',function(done){
 			servlet,
 			{
 				"Manager":{
-					"url-pattern":"/findleaks",
+					"urlPattern":"/findleaks",
 					"name": "Manager",
 					"class":"org.apache.catalina.manager.ManagerServlet"
 				},
 				"HTMLManager":{
-					"url-pattern":"/html/*",
+					"urlPattern":"/html/*",
 					"name": "HTMLManager",
 					"class":"org.apache.catalina.manager.HTMLManagerServlet"
 				},
 				"Status":{
-					"url-pattern":"/status/*",
+					"urlPattern":"/status/*",
 					"name": "Status",
 					"class":"org.apache.catalina.manager.StatusManagerServlet"
 				},
 				"JMXProxy":{
-					"url-pattern":"/jmxproxy/*",
+					"urlPattern":"/jmxproxy/*",
 					"name": "JMXProxy",
 					"class":"org.apache.catalina.manager.JMXProxyServlet"
 				}
