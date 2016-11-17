@@ -11,13 +11,16 @@ function getDOM(conn, tomcatInstallDir, xmlEntities) {
     if( fileContent.success === false) {
       throw new Error("failed  to read file content");
     }
-    return xmlParser.parse(fileContent.value, xmlEntities);
+    return {
+      "filepath" : tomcatConfigFilePath,
+      "DOM" : xmlParser.parse(fileContent.value, xmlEntities)
+    };
   };
 
   return sshUtils.readFileContent(conn, tomcatConfigFilePath)
   .then(parseFileContent)
-  .then(function(dom){
-    return dom;
+  .then(function(result){
+    return result;
   });
 }
 

@@ -22,14 +22,11 @@ var Q        = require('q'),
  */
 function extractTomcatProperties(conn, tomcatinstallDir) {
 
-	var finalResult = {
-		"properties"  : null
-	};
 	// another option would be to invoke the script tomcatinstallDir/bin/version.sh
+	//
 	return sshUtils.exec.command(conn,"cd "+tomcatinstallDir+"; java -cp  lib/catalina.jar org.apache.catalina.util.ServerInfo")
-	.then(function(result){
-		finalResult.properties = result;
-		finalResult.properties.value = finalResult.properties.value.split('\n').map(function(line){
+	.then(function(cmdOutput){
+		return cmdOutput.value.split('\n').map(function(line){
 			if(line.trim().length !== 0 ){
 				return {
 					'name'  : line.substring(0,16).replace(/:/,'').trim(),
@@ -39,11 +36,6 @@ function extractTomcatProperties(conn, tomcatinstallDir) {
 		}).filter(function(item){
 			return item;	// remove empty (undefined) element
 		});
-		finalResult.success = true;
-		return finalResult;
-	}, function(error){
-		finalResult.properties = error;
-		return finalResult;
 	});
 }
 exports.extractTomcatProperties = extractTomcatProperties;

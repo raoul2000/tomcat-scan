@@ -15,9 +15,9 @@ describe('Tomcat properties',function(done){
 
 		return tcProperties.extractTomcatProperties(connection, config.home + "/tomcat-1")
 		.then(function(result){
-			//console.log(result);
-			assert.isFalse(result.properties.success);
-			assert.isTrue(result.properties.error !== undefined);
+			done(new Error("should fail"));
+		})
+		.fail(function(err){
 			done();
 		})
 		.done(null,function(err){

@@ -70,15 +70,17 @@ function getContextsFromFile(conn, filePath, xmlEntities) {
   .then(parseFileContent)
   .then(getContextsFromDOM)
   .then(function(contextList){
+    console.log("OK to parse file : "+filePath);
     return {
       "file" : filePath,
-      "contexts" : contextList
+      "list" : contextList
     };
   })
   .fail(function(error){
+    console.log("failed to parse file : "+filePath);
     return {
-      "file" : filePath,
-      "contexts" : [],
+      "file"  : filePath,
+      "list"  : [],
       "error" : error
     };
   });
@@ -112,9 +114,11 @@ function getContextsFromFolder(conn, folderPath, xmlEntities) {
 
     return promise.allSettledInSequence(tasks)
     .then(function(results){
+      return results;
+      /*
       return results.filter(function(result){
         return result.length !== 0;
-      });
+      });*/
     });
   });
 }

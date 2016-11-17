@@ -78,7 +78,10 @@ describe('XML Parser',function(done){
 			var result = xmlParser.parse(
 				"<doc>" +
 				"Context >value</Context>"+
-				"</doc>"
+				"</doc>",
+				{
+					"ENTITY_1" : "value1"
+				}
 			);
 			assert.isTrue(false);
 		} catch (err) {
