@@ -57,6 +57,7 @@ function getContextsFromFile(conn, filePath, xmlEntities) {
     if( fileContent.success === false) {
       throw new Error("failed  to read file content");
     }
+
     return xmlParser.parse(fileContent.value, xmlEntities);
   };
 

@@ -88,4 +88,17 @@ describe('XML Parser',function(done){
 			done();
 		}
 	});
+
+	it('throws exception if parses text content',function(done){
+		try {
+			var result = xmlParser.parse("this is an XML file\n",
+				{
+					"ENTITY_1" : "value1"
+				}
+			);
+			assert.isTrue(false);
+		} catch (err) {
+			done();
+		}
+	});
 });
