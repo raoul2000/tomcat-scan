@@ -50,8 +50,8 @@ describe('Tomcat context',function(done){
 			assert.isArray(result.list);
 			assert.lengthOf(result.list, 1);
 
-			assert.equal(result.values[0].path, '/www-C');
-			assert.equal(result.values[0].docBase , '/home/folder/webapp-C');
+			assert.equal(result.list[0].path, '/www-C');
+			assert.equal(result.list[0].docBase , '/home/folder/webapp-C');
 			done();
 		})
 		.done(null, function(err){
@@ -114,13 +114,12 @@ describe('Tomcat context',function(done){
 			"HOME" : "/home/folder"
 		})
 		.then(function(result){
-			console.log(result);
+			//console.log(result);
 			assert.equal(result.file, folderPath);
 			assert.isArray(result.list);
-			assert.lengthOf(result.list, 1);
+			assert.lengthOf(result.list, 0);
+			assert.hasOwnProperty(result, "error");
 
-			assert.equal(result.values[0].path, '/www-C');
-			assert.equal(result.values[0].docBase , '/home/folder/webapp-C');
 			done();
 		})
 		.done(null, function(err){

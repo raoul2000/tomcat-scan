@@ -61,22 +61,31 @@ function parseNoEntities(strXML) {
     "error" : [],
     "fatal" : []
   };
-
   var dom = new DOMParser({
     errorHandler:{
-      warning   : function(w){ parseErrors.warning.push(w); },
-      error     : function(w){ parseErrors.error.push(w);   },
-      fatalError: function(w){ parseErrors.fatal.push(w);   }
+      warning   : function(w){
+				parseErrors.warning.push(w);
+			},
+      error     : function(w){
+				parseErrors.error.push(w);
+			},
+      fatalError: function(w){
+				parseErrors.fatal.push(w);
+			}
     }
-  }).parseFromString(strXML);
+  }).parseFromString(strXML,'text/xml');
 
-  // consider both error and fatal as severe : no DOM is returned in this case
   if(parseErrors.fatal.length !== 0 || parseErrors.error.length !== 0 ) {
+		// consider both error and fatal as severe : no DOM is returned in this case
     throw new Error("".concat(
       parseErrors.error.join("\n"),
       parseErrors.fatal.join("\n")
     ));
-  }
+  } else if( ! dom.documentElement ) {
+		// this is because xmldom does not fail to parse a simple string but
+		// creates a dom with no documentElement note instead.
+		throw new Error("failed to parse");
+	}
   return dom;
 }
 

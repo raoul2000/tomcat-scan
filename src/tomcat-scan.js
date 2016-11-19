@@ -46,13 +46,10 @@ function scanTomcat(conn, installDir, xmlEntities) {
     });
   })
   .then(function(result){
-
-    // TODO: check why a non XML individual context file does not
-    // return some error
     return context.getContextsFromFolder(conn,installDir+"/conf/Catalina/localhost", xmlEntities);
   })
   .then(function(contextList){
-    console.log(contextList);
+    //console.log(contextList);
     contextList.forEach(function(aContext){
       console.log(
           "file          : " + aContext.file +
@@ -100,12 +97,6 @@ function scanTomcat(conn, installDir, xmlEntities) {
     fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
     return scanResult;
   });
-  /*
-  .fail(function(err){
-    console.error("error !");
-    console.error(err);
-  })
-  */
 }
 
 exports.scanTomcat = scanTomcat;

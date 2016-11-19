@@ -7,10 +7,7 @@ describe('XML Parser',function(done){
 
 	it('throws exception if the XML is not well formed',function(done){
 		try {
-			var result = xmlParser.parse(
-				"<doc>" +
-				"Context >value</Context>"+
-				"</doc>",
+			var result = xmlParser.parse("not XML file",
 				{
 					"ENTITY_1" : "value1"
 				}
