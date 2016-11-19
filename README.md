@@ -1,3 +1,5 @@
+THIS IS A WORK IN PROGRESS
+
 # tomcat-scan
 
 Scan Tomcat installation folder and extract settings
