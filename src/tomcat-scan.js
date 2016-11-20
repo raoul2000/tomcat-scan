@@ -10,6 +10,14 @@ var tomcatProps = require('./tomcat/properties'),
     descriptor  = require('../src/tomcat/servlet/descriptor'),
     readFileContent = require("ssh-utils").readFileContent;
 
+/**
+ * Scan Tomat configuration.
+ *
+ * @param  {object} conn        SSH2 option object
+ * @param  {string} installDir  folder where the tomcat to scn is installed
+ * @param  {object} xmlEntities hash entity name/value used for XML parse
+ * @return {object}             Promise result (see scanResult)
+ */
 function scanTomcat(conn, installDir, xmlEntities) {
   var scanResult = {
     "properties" : null,
@@ -49,13 +57,14 @@ function scanTomcat(conn, installDir, xmlEntities) {
     return context.getContextsFromFolder(conn,installDir+"/conf/Catalina/localhost", xmlEntities);
   })
   .then(function(contextList){
-    //console.log(contextList);
+
     contextList.forEach(function(aContext){
       console.log(
           "file          : " + aContext.file +
         "\ncontext found : " + aContext.list.length + "\n"
       );
     });
+
     scanResult.contexts = scanResult.contexts.concat(contextList);
 
     var descriptorLoadTasks = [];
@@ -86,15 +95,11 @@ function scanTomcat(conn, installDir, xmlEntities) {
       });
     });
     return promise.allSettledInSequence(descriptorLoadTasks);
-  })/*
-  .then(function(descriptorList){
-    descriptorList.forEach(function(item){
-    });
-    return descriptorList;
-  })*/
+  })
   .then(function(result){
-    //fs.writeFileSync(__dirname + '/scanResult.json',JSON.stringify(scanResult), 'utf-8');
-    fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
+    delete scanResult.config.dom;
+
+    //fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
     return scanResult;
   });
 }

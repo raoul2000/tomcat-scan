@@ -17,8 +17,7 @@ describe('Scans a configuration for tomcat-1',function(done){
 	it('scan tomcat config',function(done){
 		return tc.scanTomcat(connection, config.home + '/tomcat-1',entity)
 		.then(function(result){
-			result.configDOM = null;	// avoid circular reference when stringify JSON
-			result.config.DOM = null;
+			result.config.DOM = null; // avoid circular reference when stringify JSON
 			fs.writeFileSync(__dirname + '/output/test-main-scanResult.json',JSON.stringify(result), 'utf-8');
 			done();
 		})
