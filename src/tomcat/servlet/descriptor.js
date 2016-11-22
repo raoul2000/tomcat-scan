@@ -41,7 +41,12 @@ function getAllServlet(dom) {
   for(var j=0; j<elementList.length; j ++) {
     servletName = elementList[j].getElementsByTagName('servlet-name').item(0).firstChild.nodeValue;
     if( servletList.hasOwnProperty(servletName)) {
-      servletList[servletName]["urlPattern"] = elementList[j].getElementsByTagName('url-pattern').item(0).firstChild.nodeValue;
+      var urlPatternEl = elementList[j].getElementsByTagName('url-pattern').item(0);
+      if( urlPatternEl.firstChild) {
+        servletList[servletName].urlPattern = urlPatternEl.firstChild.nodeValue;
+      } else {
+        servletList[servletName].urlPattern = "";
+      }
     }
   }
   return servletList;

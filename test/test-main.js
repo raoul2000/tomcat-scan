@@ -8,7 +8,9 @@ var config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf-8" ));
 var connection = config.sshConnection;
 
 var entity = {
-	'HOME' : config.home
+	'HOME' : config.home,
+	"TOMCAT_CORE_SHUTDOWN_PORT" : 111,
+	"TOMCAT_CORE_PORT" : 222
 };
 
 describe('Scans a configuration for tomcat-1',function(done){

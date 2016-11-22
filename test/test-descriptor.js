@@ -56,6 +56,55 @@ describe('Descriptor',function(done){
 		done();
 	});
 
+	it('handle null url-pattern values',function(done){
+
+		var result = xmlParser.parse(
+			'<?xml version="1.0" encoding="ISO-8859-1"?>' +
+			'<!-- $Id: web.xml,v 1.2 2003/04/15 08:54:08 agrant Exp $ -->' +
+			'<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"' +
+			    '"http://java.sun.com/j2ee/dtds/web-app_2.2.dtd">' +
+			'<web-app xmlns="http://java.sun.com/xml/ns/javaee">' +
+				'<display-name>CheckIn Servlet</display-name>' +
+				'<servlet>' +
+					'<servlet-name>checkin</servlet-name>' +
+					'<servlet-name>checkin2</servlet-name>' +
+					'<servlet-class>checkin.CheckinServlet</servlet-class>' +
+					'<init-param>' +
+						'<param-name>config</param-name>' +
+						'<param-value>/WEB-INF/config/config.xml</param-value>' +
+					'</init-param>' +
+					'<load-on-startup>0</load-on-startup>' +
+				'</servlet>' +
+				'<servlet-mapping>' +
+					'<servlet-name>checkin</servlet-name>' +
+					'<url-pattern></url-pattern>' +
+				'</servlet-mapping>' +
+			'</web-app>',
+			{
+				"ENTITY_1" : "value1",
+				"ENTITY_2" : "value2"
+			}
+		);
+		assert.isNotNull(result);
+		assert.isObject(result);
+		assert.isNotNull(result);
+		assert.isObject(result);
+
+		var servlet = descriptor.getAllServlet(result);
+		assert.isTrue( servlet.hasOwnProperty('checkin'));
+		assert.deepEqual(
+			servlet,
+			{
+				"checkin":{
+					"urlPattern":"",
+					"name" : "checkin",
+					"class":"checkin.CheckinServlet"
+				}
+			}
+		);
+		done();
+	});
+
 
 	it('parse the deployement descriptor again',function(done){
 		var xmlStr = fs.readFileSync(__dirname + '/sample-data/web-tc.xml','utf8');
