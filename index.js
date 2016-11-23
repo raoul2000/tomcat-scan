@@ -1,3 +1,3 @@
 module.exports = {
-    tomcatScan      : require('./src/tomcat-scan')
+    run      : require('./src/tomcat-scan').scanTomcat
 };
