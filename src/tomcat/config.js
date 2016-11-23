@@ -18,25 +18,19 @@ function getDOM(conn, tomcatInstallDir, xmlEntities) {
   };
 
   return sshUtils.readFileContent(conn, tomcatConfigFilePath)
-  .then(parseFileContent)
-  .then(function(result){
-    return result;
-  });
+  .then(parseFileContent);
 }
 
 exports.getDOM = getDOM;
 
 
-function getPortNumber(dom) {
-/*
-  var contexts = [];
-  var contextList = dom.getElementsByTagName("Context");
-  for(var i=0; i<contextList.length; i ++) {
-    contexts.push({
-      'path'    : contextList[i].getAttribute('path'),
-      'docBase' : contextList[i].getAttribute('docBase')
-    });
-  }*/
-  return 111;
+function getPortNumberByProtocol(dom, protocol) {
+  var connectorList = dom.getElementsByTagName("Connector");
+  for(var i=0; i<connectorList.length; i ++) {
+    if( connectorList[i].getAttribute("protocol") === protocol ){
+      return connectorList[i].getAttribute("port");
+    }
+  }
+  return null;
 }
-exports.getPortNumber = getPortNumber;
+exports.getPortNumberByProtocol = getPortNumberByProtocol;

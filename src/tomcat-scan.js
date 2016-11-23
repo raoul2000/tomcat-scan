@@ -25,47 +25,52 @@ function scanTomcat(conn, installDir, xmlEntities) {
     "contexts"  : []
   };
 
-  return tomcatProps.extractTomcatProperties(conn,installDir)
-  .then(function(tomcatProperties){
-
-    console.log("properties");
+  // get tomcat properties
+  var storeTomcatProperties = function(tomcatProperties) {
     scanResult.properties = tomcatProperties;
     return true;
-  })
-  .fail(function(err){
-    console.error("failed to get tomcat properties");
-    console.error(err);
-    return true;
-  })
-  .then(function(result){
+  };
 
+  // analyze the server.xml configuration filr and retrieve :
+  // - path
+  // - DOM
+  // - port number
+  // - context list
+  var analyzeServerXml = function() {
     return config.getDOM(conn, installDir, xmlEntities)
     .then(function(configDOM){
       scanResult.config = {
         "filepath" : configDOM.filepath,
         "DOM"      : configDOM.DOM
       };
-      scanResult.port = config.getPortNumber(configDOM.DOM);
+      scanResult.port = config.getPortNumberByProtocol(configDOM.DOM,"HTTP/1.1");
       scanResult.contexts.push({
         "file" : configDOM.filepath,
         "list" : context.getContextsFromDOM(configDOM.DOM)
       });
       return true;
     });
-  })
-  .then(function(result){
-    return context.getContextsFromFolder(conn,installDir+"/conf/Catalina/localhost", xmlEntities);
-  })
-  .then(function(contextList){
+  };
 
-    contextList.forEach(function(aContext){
+  // extract individual contexts defined in XML files in Catalina/localhost
+  var extractContexts = function() {
+    return context.getContextsFromFolder(conn,installDir+"/conf/Catalina/localhost", xmlEntities)
+    .then(function(contextList){
+      scanResult.contexts = scanResult.contexts.concat(contextList);
+      return true;
+    });
+  };
+
+  // for each context, read & Parse the descriptor file and search for
+  // servlet
+  var extractServlets = function(){
+
+    scanResult.contexts.forEach(function(aContext){
       console.log(
           "file          : " + aContext.file +
         "\ncontext found : " + aContext.list.length + "\n"
       );
     });
-
-    scanResult.contexts = scanResult.contexts.concat(contextList);
 
     var descriptorLoadTasks = [];
     scanResult.contexts.forEach(function(item){
@@ -95,13 +100,28 @@ function scanTomcat(conn, installDir, xmlEntities) {
       });
     });
     return promise.allSettledInSequence(descriptorLoadTasks);
-  })
-  .then(function(result){
-    delete scanResult.config.dom;
+  };
 
-    //fs.writeFileSync(__dirname + '/result.json',JSON.stringify(result), 'utf-8');
+  // remove the config DOM to avoid circular reference error on object deserialization
+  var cleanupResult = function(){
+    delete scanResult.config.dom;
     return scanResult;
-  });
+  };
+
+  ////////////////////////////////////////////////////////////
+  /// Main Promise  chain
+  ///
+  return tomcatProps.extractTomcatProperties(conn,installDir)
+  .then(storeTomcatProperties)
+  .fail(function(err){
+    console.error("failed to get tomcat properties");
+    console.error(err);
+    return true;
+  })
+  .then(analyzeServerXml)
+  .then(extractContexts)
+  .then(extractServlets)
+  .then(cleanupResult);
 }
 
 exports.scanTomcat = scanTomcat;

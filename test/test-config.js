@@ -23,8 +23,11 @@ describe('Tomcat config',function(done){
 		return config.getDOM(cfg.sshConnection, cfg.home + "/tomcat-1", xmlEntities)
 		.then(function(domConfig){
 			assert.isObject(domConfig);
-			var port = config.getPortNumber(domConfig);
-			assert.equal(port, 111);
+			var port = config.getPortNumberByProtocol(domConfig.DOM,"HTTP/1.1");
+			assert.equal(port, 8080);
+			
+			port = config.getPortNumberByProtocol(domConfig.DOM,"NOT_FOUND");
+			assert.equal(port, null);
 			done();
 		})
 		.done(null,function(err){
