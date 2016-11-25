@@ -42,16 +42,16 @@ describe('Descriptor',function(done){
 		assert.isObject(result);
 
 		var servlet = descriptor.getAllServlet(result);
-		assert.isTrue( servlet.hasOwnProperty('checkin'));
+		assert.isArray(servlet);
 		assert.deepEqual(
 			servlet,
-			{
-				"checkin":{
-					"urlPattern":"/servlet/checkin",
+			[
+				{
+					"urlPattern": ["/servlet/checkin"],
 					"name" : "checkin",
 					"class":"checkin.CheckinServlet"
 				}
-			}
+			]
 		);
 		done();
 	});
@@ -91,16 +91,17 @@ describe('Descriptor',function(done){
 		assert.isObject(result);
 
 		var servlet = descriptor.getAllServlet(result);
-		assert.isTrue( servlet.hasOwnProperty('checkin'));
+		assert.isArray(servlet);
 		assert.deepEqual(
 			servlet,
-			{
-				"checkin":{
-					"urlPattern":"",
+			[
+
+				{
+					"urlPattern": [""],
 					"name" : "checkin",
 					"class":"checkin.CheckinServlet"
 				}
-			}
+			]
 		);
 		done();
 	});
@@ -117,30 +118,48 @@ describe('Descriptor',function(done){
 		assert.isObject(result);
 
 		var servlet = descriptor.getAllServlet(result);
+		assert.isArray(servlet);
 		assert.deepEqual(
 			servlet,
-			{
-				"Manager":{
-					"urlPattern":"/findleaks",
+			[
+				{
+					"urlPattern": [
+						"/list",
+						"/expire",
+						"/sessions",
+						"/start",
+						"/stop",
+						"/install",
+						"/remove",
+						"/deploy",
+						"/undeploy",
+						"/reload",
+						"/save",
+						"/serverinfo",
+						"/roles",
+						"/resources",
+						"/findleaks"
+					]
+					,
 					"name": "Manager",
 					"class":"org.apache.catalina.manager.ManagerServlet"
 				},
-				"HTMLManager":{
-					"urlPattern":"/html/*",
+				{
+					"urlPattern":["/html/*"],
 					"name": "HTMLManager",
 					"class":"org.apache.catalina.manager.HTMLManagerServlet"
 				},
-				"Status":{
-					"urlPattern":"/status/*",
+				{
+					"urlPattern":["/status/*"],
 					"name": "Status",
 					"class":"org.apache.catalina.manager.StatusManagerServlet"
 				},
-				"JMXProxy":{
-					"urlPattern":"/jmxproxy/*",
+				{
+					"urlPattern":["/jmxproxy/*"],
 					"name": "JMXProxy",
 					"class":"org.apache.catalina.manager.JMXProxyServlet"
 				}
-			}
+			]
 		);
 		done();
 	});
