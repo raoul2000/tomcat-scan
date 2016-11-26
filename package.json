@@ -1,7 +1,7 @@
 {
   "name": "tomcat-scan",
-  "version": "0.0.1",
-  "description": "scan and extract tomcat configuration from a remote location using SSH",
+  "version": "0.0.2",
+  "description": "scan and extract tomcat configuration from a remote folder using SSH",
   "main": "index.js",
   "scripts": {
     "test": "mocha ./test"
