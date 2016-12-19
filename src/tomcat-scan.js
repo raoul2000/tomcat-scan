@@ -104,7 +104,7 @@ function scanTomcat(conn, installDir, xmlEntities) {
 
   // remove the config DOM to avoid circular reference error on object deserialization
   var cleanupResult = function(){
-    delete scanResult.config.dom;
+    delete scanResult.config.DOM;
     return scanResult;
   };
 
