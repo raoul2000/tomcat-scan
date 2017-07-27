@@ -1,8 +1,8 @@
 THIS IS A WORK IN PROGRESS
 
-# tomcat-scan
+# Scan for Apache Tomcat
 
-Scan Tomcat installation folder and extract :
+Scan Apache Tomcat installation folder and extract :
 - tomcat properties
 - port number
 - list of contexts
